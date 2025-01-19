@@ -1,15 +1,11 @@
+import { fetchListVideos } from "@/api/videos.fetcher";
 import { Video } from "@/types";
 
 export async function fetchVideo({ contentId }: { contentId: string }) {
-  const baseUrl = process.env.NEXT_PUBLIC_URL;
-  const res = await fetch(`${baseUrl}/list-video.json`);
+  const items = await fetchListVideos();
+  if (!items) return null;
 
-  if (!res.ok) {
-    throw new Error(res.statusText);
-  }
-
-  const data = await res.json();
-  const item = data.items.find(
+  const item = items.find(
     (item: Video) => item.content_id.toString() === contentId,
   );
   if (!item) return null;
